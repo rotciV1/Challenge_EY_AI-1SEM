@@ -6,6 +6,7 @@ import pytesseract
 from pytesseract import Output
 
 filename = "sample.jpeg"
+# É necessário apontar o path para o arquivo pytesseract.exe com essa variavel ou a lib não funciona
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
 
 img = cv2.imread(filename)
@@ -24,10 +25,11 @@ for i in range(0, len(results["text"])):
     h = results["height"][i]
 
     text = results["text"][i]
-    conf = int(results["conf"][i].split('.')[0])
+
     # A função Int() não pode receber valores double, como no caso do dado "conf" da imagem (95.572105), para resolver o problema, é usada a função split() onde o valor é divido no ponto "." e é utilizado apenas o índice[0], ou seja, 95
     # Neste caso não se faz necessário o arredondamento, mas se sim, o problema pode ser solucionado com if(results["conf"][i].split('.')[1][0] > 6): conf = int(results["conf"][i].split('.')[0]) + 1
     # A função round não pode ser usada neste caso pelo fato de type(results["conf"][i]) = str ; a função round apenas aceita valores int
+    conf = int(results["conf"][i].split('.')[0])
 
     if conf > 70:
         text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
